@@ -176,7 +176,6 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 <header class="site-header">
   <div class="wrap wrap--wide site-header__inner">
     <a class="brand" href="${p || './'}">
-      <span class="brand__mark" aria-hidden="true">🐱</span>
       <span>${escapeHtml(site.shortTitle)}</span>
     </a>
     <nav class="nav" aria-label="主要導覽">
