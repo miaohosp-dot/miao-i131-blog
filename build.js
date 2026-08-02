@@ -180,7 +180,8 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 <header class="site-header">
   <div class="wrap wrap--wide site-header__inner">
     <a class="brand" href="${p || './'}">
-      <span>${escapeHtml(site.shortTitle)}</span>
+      <span class="brand__name">${escapeHtml(site.brand.name)}</span>
+      <span class="brand__suffix">· ${escapeHtml(site.brand.suffix)}</span>
     </a>
     <nav class="nav" aria-label="主要導覽">
       <a href="${p || './'}"${depth === 0 ? ' aria-current="page"' : ''}>全部文章</a>

@@ -206,6 +206,17 @@ strong {
   min-width: 0;
 }
 
+/* 窄螢幕只顯示醫院名稱，副標隱藏，讓品牌與導覽擠得進同一行 */
+.brand__suffix {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .brand__suffix {
+    display: inline;
+  }
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;
