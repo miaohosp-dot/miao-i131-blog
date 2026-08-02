@@ -14,6 +14,7 @@
 }
 
 html {
+  color-scheme: dark; /* 讓捲軸與表單元件也用深色 */
   -webkit-text-size-adjust: 100%; /* 防止 iOS 橫置時自動放大字級 */
   scroll-behavior: smooth;
 }
@@ -64,24 +65,28 @@ pre {
 
 /* --- 2. 設計變數 --------------------------------------------------------- */
 
-/* 配色取自 iod131.com：主色 #076db1、深藍 #00305b、淺藍綠 #b3d9d9 */
+/* 深色配色，參考 apex.innovarad.tw：深暖棕底 + 金色重點 + 不同透明度的白字。
+   刻意不做淺色模式切換——固定深色才能維持一致的閱讀質感。
+
+   長文閱讀的關鍵：正文不用純白。純白配純黑對比過強，中文筆畫多，
+   長時間閱讀會產生視覺疲勞與光暈，所以正文降到 82% 不透明度。 */
 :root {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --surface-alt: #f1f5f9;
-  --text: #231f20;
-  --text-soft: #4d4a4b;
-  --text-faint: #8a8788;
-  --accent: #076db1;
-  --accent-soft: #e7f1f9;
-  --accent-deep: #00305b;
-  --accent-mid: #32698e;
-  --accent-pale: #b3d9d9;
-  --warn-bg: #fdf6e6;
-  --warn-border: #e0b64a;
-  --line: #e3e7eb;
+  --bg: #14100a;
+  --surface: #1e1810;
+  --surface-alt: #262017;
+  --text: rgba(255, 255, 255, 0.92);
+  --text-soft: rgba(255, 255, 255, 0.82);
+  --text-faint: rgba(255, 255, 255, 0.5);
+  --accent: #d4a84e;
+  --accent-soft: rgba(212, 168, 78, 0.13);
+  --accent-deep: #e8c584;
+  --accent-mid: #a8823a;
+  --accent-pale: rgba(212, 168, 78, 0.3);
+  --warn-bg: rgba(192, 57, 43, 0.12);
+  --warn-border: #c0392b;
+  --line: rgba(255, 255, 255, 0.09);
   --radius: 14px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.3);
 
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
     "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
@@ -91,25 +96,6 @@ pre {
   --gutter: clamp(1rem, 4vw, 2rem);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14181c;
-    --surface: #1c2126;
-    --surface-alt: #232a31;
-    --text: #e9edf1;
-    --text-soft: #b3bcc4;
-    --text-faint: #868f97;
-    --accent: #4ea3e0;
-    --accent-soft: #14283a;
-    --accent-deep: #8ecbf2;
-    --accent-mid: #6b9ec4;
-    --accent-pale: #2c4a4a;
-    --warn-bg: #33291a;
-    --warn-border: #a6832f;
-    --line: #2e353c;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
-  }
-}
 
 /* --- 3. 基本排版 --------------------------------------------------------- */
 
@@ -263,6 +249,8 @@ strong {
   margin: 0 auto 1.8rem;
   box-shadow: var(--shadow);
   background: var(--surface-alt);
+  /* 深色底下，白底的示意圖會像一塊發光的板子；細邊框能收住邊緣 */
+  border: 1px solid var(--line);
 }
 
 .article .hero__img {
