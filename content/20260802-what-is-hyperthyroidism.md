@@ -4,7 +4,7 @@ date: 2026-08-02
 author: 喵屋貓咪專科醫院
 tag: 認識疾病
 readingTime: 6
-hero: iod
+hero: senior
 excerpt: 為什麼老貓特別容易得？甲狀腺出了什麼問題？從疾病成因、好發族群，到它對心臟、血壓和腎臟造成的連鎖影響。
 ---
 

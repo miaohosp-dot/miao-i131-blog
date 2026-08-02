@@ -46,6 +46,36 @@ export const site = {
       alt: '一隻貓在夕陽下的海邊行走',
       caption: '中老年貓的每一天，都值得被好好照顧',
     },
+
+    /* 以下取自 miao911.com（周春婷獸醫師），每篇文章各用一張 */
+    senior: {
+      src: 'assets/img/cat-senior.jpg',
+      width: 1200,
+      height: 770,
+      alt: '一隻消瘦的橘貓在住院籠中休息',
+      caption: '甲亢常見於中老年貓，體重下降是最早被注意到的變化',
+    },
+    pupils: {
+      src: 'assets/img/cat-pupils.jpg',
+      width: 519,
+      height: 376,
+      alt: '一隻灰貓被毛巾包裹保定，瞳孔明顯放大',
+      caption: '躁動、瞳孔放大，是甲亢貓常見的樣子',
+    },
+    sideEffects: {
+      src: 'assets/img/drug-side-effects.jpg',
+      width: 1200,
+      height: 672,
+      alt: '貓甲亢藥物副作用示意圖：皮膚反應、消化系統、行為改變、肝臟問題、血液與免疫',
+      caption: '抗甲狀腺藥物可能出現的副作用',
+    },
+    cage: {
+      src: 'assets/img/cat-cage.jpg',
+      width: 914,
+      height: 613,
+      alt: '一隻貓站立扶著住院籠門向外看',
+      caption: '放射碘治療期間必須住院隔離，這段時間無法探視',
+    },
     clinic: {
       src: 'assets/img/clinic-wide.jpg',
       width: 1600,
@@ -69,7 +99,7 @@ export const site = {
     author: '喵屋貓咪專科醫院',
     license: '',
     licenseUrl: '',
-    source: 'miao.tw 與 iod131.com',
+    source: 'miao.tw、iod131.com 與 miao911.com',
   },
 
   clinic: {

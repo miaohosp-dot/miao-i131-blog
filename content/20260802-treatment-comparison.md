@@ -4,7 +4,7 @@ date: 2026-08-02
 author: 喵屋貓咪專科醫院
 tag: 治療選擇
 readingTime: 8
-hero: iod
+hero: sideEffects
 excerpt: 口服藥、處方飼料、手術、放射碘——各自的原理、費用型態、優缺點與適合的貓，一次看懂。
 ---
 
