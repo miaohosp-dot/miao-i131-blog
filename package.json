@@ -1,0 +1,15 @@
+{
+  "name": "miao-i131-blog",
+  "version": "1.0.0",
+  "description": "貓甲狀腺機能亢進與放射碘治療衛教部落格",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "node build.js && node --run serve:only",
+    "serve:only": "python3 -m http.server 8899 --directory dist"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "marked": "^15.0.0"
+  }
+}

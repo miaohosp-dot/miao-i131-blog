@@ -1,0 +1,653 @@
+/* ==========================================================================
+   喵屋 I-131 部落格 — 共用樣式
+   設計原則：行動裝置優先、任何內容都不得撐破容器
+   ========================================================================== */
+
+/* --- 1. 重置與防破框基礎 ------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* padding/border 不會撐大元素 */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%; /* 防止 iOS 橫置時自動放大字級 */
+  scroll-behavior: smooth;
+}
+
+body {
+  /* 最後一道防線：任何漏網的寬元素都不會產生整頁橫向捲動 */
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* 媒體元素永遠不超出容器 */
+img,
+video,
+svg,
+iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 長字串（英文藥名、網址、數值）強制斷行，這是中文網站最常見的破框來源 */
+p,
+li,
+dd,
+dt,
+figcaption,
+blockquote,
+h1,
+h2,
+h3,
+h4,
+th,
+td {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* 網址類文字允許在任意位置斷開 */
+a {
+  overflow-wrap: anywhere;
+}
+
+/* 程式碼與預格式文字改為自身橫向捲動，不推擠版面 */
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* --- 2. 設計變數 --------------------------------------------------------- */
+
+/* 配色取自 iod131.com：主色 #076db1、深藍 #00305b、淺藍綠 #b3d9d9 */
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --text: #231f20;
+  --text-soft: #4d4a4b;
+  --text-faint: #8a8788;
+  --accent: #076db1;
+  --accent-soft: #e7f1f9;
+  --accent-deep: #00305b;
+  --accent-mid: #32698e;
+  --accent-pale: #b3d9d9;
+  --warn-bg: #fdf6e6;
+  --warn-border: #e0b64a;
+  --line: #e3e7eb;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.04);
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
+    "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+
+  /* 版心寬度：手機留邊、桌機不過寬，中文閱讀舒適區約 34-38 字 */
+  --measure: 42rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14181c;
+    --surface: #1c2126;
+    --surface-alt: #232a31;
+    --text: #e9edf1;
+    --text-soft: #b3bcc4;
+    --text-faint: #868f97;
+    --accent: #4ea3e0;
+    --accent-soft: #14283a;
+    --accent-deep: #8ecbf2;
+    --accent-mid: #6b9ec4;
+    --accent-pale: #2c4a4a;
+    --warn-bg: #33291a;
+    --warn-border: #a6832f;
+    --line: #2e353c;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* --- 3. 基本排版 --------------------------------------------------------- */
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  /* 中文需要較大行高才好讀 */
+  line-height: 1.85;
+  font-size: 17px;
+  letter-spacing: 0.01em;
+}
+
+@media (min-width: 40rem) {
+  body {
+    font-size: 18px;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--text);
+  /* 中文標題不需要字距，但避免過長標題擠壓 */
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 5.5vw, 2.3rem);
+}
+
+h2 {
+  font-size: clamp(1.25rem, 4.2vw, 1.55rem);
+  margin-top: 2.4em;
+  margin-bottom: 0.7em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+h3 {
+  font-size: clamp(1.08rem, 3.4vw, 1.2rem);
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+  color: var(--accent-deep);
+}
+
+p {
+  margin-bottom: 1.15em;
+  color: var(--text-soft);
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-deep);
+}
+
+strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* --- 4. 版面容器 --------------------------------------------------------- */
+
+.wrap {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap--wide {
+  max-width: 56rem;
+}
+
+/* --- 5. 頁首與導覽 ------------------------------------------------------- */
+
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding-block: 1rem;
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap; /* 手機窄螢幕自動換行，不擠出邊界 */
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  text-decoration: none;
+  /* 品牌名過長時仍可收縮 */
+  min-width: 0;
+}
+
+.brand__mark {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  font-size: 0.92rem;
+  min-width: 0;
+}
+
+.nav a {
+  color: var(--text-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav a:hover,
+.nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+/* --- 6. 首頁英雄區 ------------------------------------------------------- */
+
+.hero {
+  background: linear-gradient(180deg, var(--accent-soft), var(--bg));
+  padding-block: clamp(2.5rem, 9vw, 4.5rem);
+  text-align: center;
+}
+
+.hero h1 {
+  margin-bottom: 0.6em;
+  text-wrap: balance; /* 標題折行更均勻，支援的瀏覽器才生效 */
+}
+
+/* HERO 圖片：等比例縮放，寬度永遠不超過內容文字區（.wrap 的 42rem） */
+.hero__img {
+  width: 100%;
+  max-width: 100%;
+  height: auto; /* 保持原始長寬比，不變形 */
+  aspect-ratio: 980 / 840;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin: 0 auto 1.8rem;
+  box-shadow: var(--shadow);
+  background: var(--surface-alt);
+}
+
+.article .hero__img {
+  margin-bottom: 2rem;
+}
+
+.hero__views {
+  margin-top: 1.2rem;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+}
+
+.hero p {
+  font-size: clamp(0.98rem, 2.8vw, 1.1rem);
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+/* --- 7. 文章列表卡片 ----------------------------------------------------- */
+
+.post-list {
+  list-style: none;
+  display: grid;
+  gap: 1.1rem;
+  padding-block: 2.5rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.1rem, 4vw, 1.6rem);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  /* grid 子項目預設 min-width:auto 會被長內容撐開，必須歸零 */
+  min-width: 0;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  margin-bottom: 0.6rem;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.card h2 {
+  font-size: clamp(1.1rem, 3.6vw, 1.3rem);
+  margin: 0 0 0.4rem;
+  padding: 0;
+  border: 0;
+}
+
+.card h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.card h2 a:hover {
+  color: var(--accent);
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.card__author {
+  margin-top: 0.7rem !important;
+  font-size: 0.83rem !important;
+  color: var(--text-faint);
+}
+
+/* 瀏覽次數（由 Supabase 填入，未設定時保持隱藏） */
+/* 這條要放在 .views 之前：class 的 display 會蓋過瀏覽器對 [hidden] 的預設規則 */
+[hidden] {
+  display: none !important;
+}
+
+.views {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25em;
+  white-space: nowrap;
+}
+
+.views__num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.article__author {
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* --- 8. 文章內頁 --------------------------------------------------------- */
+
+.article {
+  padding-block: 2.5rem 4rem;
+}
+
+.article__header {
+  margin-bottom: 2rem;
+}
+
+.article__header h1 {
+  margin-bottom: 0.5rem;
+  text-wrap: balance;
+}
+
+.article__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+}
+
+.article ul,
+.article ol {
+  margin: 0 0 1.3em;
+  padding-left: 1.35em;
+  color: var(--text-soft);
+}
+
+.article li {
+  margin-bottom: 0.5em;
+}
+
+.article li::marker {
+  color: var(--accent);
+}
+
+/* --- 9. 表格：手機上改為自身橫向捲動，絕不撐破頁面 ---------------------- */
+
+.table-wrap {
+  /* 這個包裝層是表格不破框的關鍵 */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1.5em;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* 讓欄位有最小可讀寬度，不足時由外層捲動 */
+  min-width: 34rem;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  background: var(--surface-alt);
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+td {
+  color: var(--text-soft);
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.table-hint {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  margin: -1em 0 1.5em;
+}
+
+@media (min-width: 40rem) {
+  .table-hint {
+    display: none; /* 桌機放得下，不需要提示 */
+  }
+}
+
+/* --- 10. 提示框 ---------------------------------------------------------- */
+
+.callout {
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1rem 1.15rem;
+  margin: 0 0 1.5em;
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout__title {
+  font-weight: 700;
+  color: var(--accent-deep);
+  margin-bottom: 0.3em;
+}
+
+.callout--warn {
+  background: var(--warn-bg);
+  border-left-color: var(--warn-border);
+}
+
+.callout--warn .callout__title {
+  color: var(--text);
+}
+
+/* --- 11. 症狀檢查表 ------------------------------------------------------ */
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1.5em;
+}
+
+.checklist li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  min-width: 0; /* 長文字不撐開 flex 項目 */
+}
+
+.checklist li::before {
+  content: "✓";
+  flex: none;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* --- 12. 頁尾 ------------------------------------------------------------ */
+
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-block: 2.5rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+.site-footer h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.8rem;
+  padding: 0;
+  border: 0;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.contact-list li {
+  display: flex;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.contact-list span:first-child {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* CC BY 圖片出處標示 */
+.site-footer__credit {
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  margin-bottom: 0;
+}
+
+.site-footer__legal {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+
+/* --- 13. 返回連結 -------------------------------------------------------- */
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--text-faint);
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+/* --- 14. 無障礙 ---------------------------------------------------------- */
+
+/* 螢幕閱讀器可讀、視覺上隱藏（用於表格 caption 等） */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 10;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

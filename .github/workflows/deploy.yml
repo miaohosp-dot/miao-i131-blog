@@ -1,0 +1,81 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# GitHub Pages 需要的權限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------
+  # 1. 建置：把 content/*.md 轉成 dist/
+  #    這裡需要完整的 git 歷史，因為「最後更新日期」是取自 git 提交時間
+  # ---------------------------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 取得完整歷史，日期才會正確
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  # ---------------------------------------------------------------------
+  # 2. 部署到 GitHub Pages
+  #    需要在 repo Settings → Pages → Source 選擇 "GitHub Actions"
+  # ---------------------------------------------------------------------
+  github-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ---------------------------------------------------------------------
+  # 3. 同步部署到 Cloudflare Pages
+  #    需要先在 repo Settings → Secrets and variables → Actions 設定：
+  #      CLOUDFLARE_API_TOKEN   （Cloudflare 後台建立，權限選 Cloudflare Pages:Edit）
+  #      CLOUDFLARE_ACCOUNT_ID  （Cloudflare 後台右側可看到）
+  # ---------------------------------------------------------------------
+  cloudflare-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=miao-i131-blog --branch=main
