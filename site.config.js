@@ -30,24 +30,28 @@ export const site = {
       height: 697,
       // 圖上有內嵌文字，alt 必須把文字內容也帶進來，螢幕閱讀器才讀得到
       alt: '貓是上帝最完美的傑作 — The smallest feline is a masterpiece',
+      caption: '貓是上帝最完美的傑作',
     },
     iod: {
       src: 'assets/img/hero-main.webp',
       width: 980,
       height: 840,
       alt: '貓咪碘-131 放射碘治療中心主視覺',
+      caption: '喵屋碘-131 放射碘治療中心',
     },
     cat: {
       src: 'assets/img/article-cat.jpg',
       width: 1200,
       height: 627,
       alt: '一隻貓在夕陽下的海邊行走',
+      caption: '中老年貓的每一天，都值得被好好照顧',
     },
     clinic: {
       src: 'assets/img/clinic-wide.jpg',
       width: 1600,
       height: 655,
       alt: '喵屋貓咪專科醫院環境',
+      caption: '喵屋貓咪專科醫院',
     },
   },
 

@@ -295,11 +295,44 @@ strong {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: clamp(1.1rem, 4vw, 1.6rem);
   box-shadow: var(--shadow);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   /* grid 子項目預設 min-width:auto 會被長內容撐開，必須歸零 */
   min-width: 0;
+  overflow: hidden; /* 讓縮圖的直角被卡片圓角裁掉 */
+}
+
+/* 卡片縮圖：固定 16:9，用 cover 裁切，不同比例的圖也能排得整齊 */
+.card__thumb {
+  display: block;
+  line-height: 0;
+}
+
+.card__thumb img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--surface-alt);
+}
+
+.card__body {
+  padding: clamp(1.1rem, 4vw, 1.5rem);
+  min-width: 0;
+}
+
+.card__more {
+  margin-top: 0.9rem !important;
+  font-size: 0.9rem !important;
+}
+
+.card__more a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.card__more a:hover {
+  text-decoration: underline;
 }
 
 .card:hover {
@@ -378,14 +411,60 @@ strong {
   color: var(--text-soft);
 }
 
+/* --- 7b. 麵包屑 ---------------------------------------------------------- */
+
+.breadcrumb {
+  padding-top: 1.6rem;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.breadcrumb a {
+  color: var(--text-faint);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+/* --- 7c. 封面圖與圖說 ---------------------------------------------------- */
+
+.hero-figure {
+  margin: 0 0 2rem;
+}
+
+.hero-figure .hero__img {
+  margin-bottom: 0.6rem;
+}
+
+.hero-figure figcaption {
+  font-size: 0.83rem;
+  color: var(--text-faint);
+  text-align: center;
+  line-height: 1.6;
+}
+
 /* --- 8. 文章內頁 --------------------------------------------------------- */
 
 .article {
-  padding-block: 2.5rem 4rem;
+  padding-block: 1.4rem 4rem;
 }
 
 .article__header {
   margin-bottom: 2rem;
+}
+
+/* 日期放在標題上方 */
+.article__date {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-faint);
+  margin-bottom: 0.6rem;
 }
 
 .article__header h1 {
@@ -632,6 +711,38 @@ tr:last-child td {
 /* 只有下一篇時，讓它靠右對齊佔第二欄 */
 .post-nav__item--next:only-child {
   grid-column: -2;
+}
+
+/* --- 12c. 延伸閱讀 ------------------------------------------------------- */
+
+.related {
+  padding-block: 1rem 1rem;
+}
+
+.related__title {
+  font-size: clamp(1.1rem, 3.6vw, 1.3rem);
+  margin: 0 0 1.1rem;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+.post-list--related {
+  padding-block: 0;
+}
+
+@media (min-width: 46rem) {
+  .post-list--related {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 延伸閱讀的卡片字級略小，避免搶過本文 */
+.post-list--related .card h2 {
+  font-size: 1.02rem;
+}
+
+.post-list--related .card p {
+  font-size: 0.9rem;
 }
 
 /* --- 13. 返回連結 -------------------------------------------------------- */

@@ -79,6 +79,10 @@ const isoDate = (d) =>
 
 const zhDate = (d) => `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
 
+/** 卡片與文章頁使用的簡潔日期格式：2026/08/02 */
+const slashDate = (d) =>
+  `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+
 /** 取得指定的 HERO 圖設定，找不到就用預設 */
 const heroFor = (key) => site.images[key] || site.images[site.defaultHero];
 
@@ -222,26 +226,45 @@ const viewCounter = (slug) =>
 const heroImg = (img, depth, eager) =>
   `<img class="hero__img" src="${prefix(depth)}${img.src}" width="${img.width}" height="${img.height}" alt="${escapeHtml(img.alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>`;
 
+/** 帶圖說的封面圖 */
+const heroFigure = (img, depth) =>
+  `<figure class="hero-figure">
+      ${heroImg(img, depth, true)}
+      ${img.caption ? `<figcaption>${escapeHtml(img.caption)}</figcaption>` : ''}
+    </figure>`;
+
+/**
+ * 文章卡片：縮圖 → 分類 → 日期 → 標題 → 摘要 → 閱讀全文
+ * depth 0 用於首頁，1 用於文章頁的延伸閱讀區。
+ */
+function card(post, depth) {
+  const p = prefix(depth);
+  const href = depth === 0 ? `${post.slug}/` : `../${post.slug}/`;
+  return `      <li class="card">
+        <a class="card__thumb" href="${href}" tabindex="-1" aria-hidden="true">
+          <img src="${p}${post.hero.src}" width="${post.hero.width}" height="${post.hero.height}"
+               alt="" loading="lazy">
+        </a>
+        <div class="card__body">
+          <div class="card__meta">
+            ${post.tag ? `<span class="tag">${escapeHtml(post.tag)}</span>` : ''}
+            <time datetime="${isoDate(post.updated)}">📅 ${slashDate(post.updated)}</time>
+            ${post.readingTime ? `<span>閱讀約 ${escapeHtml(post.readingTime)} 分鐘</span>` : ''}
+            ${viewCounter(post.slug)}
+          </div>
+          <h2><a href="${href}">${escapeHtml(post.title)}</a></h2>
+          <p>${escapeHtml(post.excerpt)}</p>
+          <p class="card__more"><a href="${href}">閱讀全文 →</a></p>
+        </div>
+      </li>`;
+}
+
 /* ---------- 首頁 ------------------------------------------------------ */
 
 function renderIndex(posts) {
   const hero = site.images[site.defaultHero];
 
-  const cards = posts
-    .map(
-      (post) => `      <li class="card">
-        <div class="card__meta">
-          ${post.tag ? `<span class="tag">${escapeHtml(post.tag)}</span>` : ''}
-          <time datetime="${isoDate(post.updated)}">更新於 ${zhDate(post.updated)}</time>
-          ${post.readingTime ? `<span>閱讀約 ${escapeHtml(post.readingTime)} 分鐘</span>` : ''}
-          ${viewCounter(post.slug)}
-        </div>
-        <h2><a href="${post.slug}/">${escapeHtml(post.title)}</a></h2>
-        <p>${escapeHtml(post.excerpt)}</p>
-        <p class="card__author">${escapeHtml(post.author)}</p>
-      </li>`
-    )
-    .join('\n');
+  const cards = posts.map((post) => card(post, 0)).join('\n');
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -271,7 +294,7 @@ function renderIndex(posts) {
     `
   <section class="hero">
     <div class="wrap">
-      ${heroImg(hero, 0, true)}
+      ${heroFigure(hero, 0)}
       <h1>貓咪甲狀腺機能亢進<br>與放射碘治療</h1>
       <p>甲亢是中老年貓最常見的內分泌疾病。這裡整理了從症狀辨識、治療選擇到 I-131 療程的完整說明，希望能幫助你在照顧牠的路上少一點徬徨。</p>
       <p class="hero__views">${viewCounter('home')}</p>
@@ -290,7 +313,7 @@ ${cards}
 
 /* ---------- 文章頁 ---------------------------------------------------- */
 
-function renderPost(post, prev, next) {
+function renderPost(post, prev, next, related4) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalWebPage',
@@ -327,6 +350,13 @@ ${navLink(next, '下一篇', 'post-nav__item--next')}
   </nav>`
       : '';
 
+  // 延伸閱讀：取其他文章，最多四篇
+  const related = related4
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, 4)
+    .map((p) => card(p, 1))
+    .join('\n');
+
   return (
     head({
       title: `${post.title} ｜ ${site.shortTitle}`,
@@ -337,27 +367,41 @@ ${navLink(next, '下一篇', 'post-nav__item--next')}
       jsonLd,
     }) +
     `
+  <nav class="breadcrumb wrap" aria-label="麵包屑">
+    <a href="../">首頁</a>
+    ${post.tag ? `<span aria-hidden="true">›</span> <span>${escapeHtml(post.tag)}</span>` : ''}
+  </nav>
+
   <article class="article wrap">
-    <a class="back-link" href="../">← 回到文章列表</a>
-
-    ${heroImg(post.hero, 1, true)}
-
     <header class="article__header">
+      <time class="article__date" datetime="${isoDate(post.published)}">📅 ${slashDate(post.published)}</time>
       <h1>${escapeHtml(post.title)}</h1>
       <div class="article__meta">
         ${post.tag ? `<span class="tag">${escapeHtml(post.tag)}</span>` : ''}
         <span class="article__author">${escapeHtml(post.author)}</span>
-        <time datetime="${isoDate(post.published)}">發布於 ${zhDate(post.published)}</time>
         <time datetime="${isoDate(post.updated)}">最後更新 ${zhDate(post.updated)}</time>
         ${post.readingTime ? `<span>閱讀約 ${escapeHtml(post.readingTime)} 分鐘</span>` : ''}
         ${viewCounter(post.slug)}
       </div>
     </header>
 
+    ${heroFigure(post.hero, 1)}
+
 ${post.html}
   </article>
 
 ${postNav}
+
+${
+  related
+    ? `  <section class="related wrap">
+    <h2 class="related__title">延伸閱讀</h2>
+    <ul class="post-list post-list--related">
+${related}
+    </ul>
+  </section>`
+    : ''
+}
 ` +
     footer(1)
   );
@@ -377,7 +421,7 @@ function renderPage(page) {
     `
   <article class="article wrap">
     <a class="back-link" href="../">← 回到文章列表</a>
-    ${heroImg(page.hero, 1, true)}
+    ${heroFigure(page.hero, 1)}
     <header class="article__header">
       <h1>${escapeHtml(page.title)}</h1>
     </header>
@@ -452,7 +496,7 @@ function build() {
     const next = posts[i + 1] || null;
     const dir = join(DIST, post.slug);
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'index.html'), renderPost(post, prev, next));
+    writeFileSync(join(dir, 'index.html'), renderPost(post, prev, next, posts));
   });
 
   for (const page of pages) {
