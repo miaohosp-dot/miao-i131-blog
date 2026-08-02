@@ -68,12 +68,27 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # 還沒設定 API token 時就略過，不要讓整個流程紅字失敗。
+      # 一旦 secret 補上，這個 job 會自動開始運作，不需要改這個檔案。
+      - id: check
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::尚未設定 CLOUDFLARE_API_TOKEN，略過 Cloudflare Pages 部署"
+          fi
+
       - uses: actions/download-artifact@v4
+        if: steps.check.outputs.ready == 'true'
         with:
           name: site
           path: dist
 
       - name: Deploy to Cloudflare Pages
+        if: steps.check.outputs.ready == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
