@@ -10,7 +10,7 @@ export const site = {
   baseUrl: 'https://miao-i131-blog.pages.dev',
 
   title: '貓甲亢與放射碘治療',
-  shortTitle: '喵屋 · 甲亢與放射碘',
+  shortTitle: '喵屋貓咪專科醫院 · 甲亢與放射碘',
   description:
     '貓咪甲狀腺機能亢進與碘-131 放射碘治療的完整衛教：症狀辨識、四種治療方式比較、療程流程與治療後追蹤。',
   lang: 'zh-Hant-TW',
