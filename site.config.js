@@ -23,7 +23,15 @@ export const site = {
    * 全部都會等比例縮放，寬度不超過內容文字區。
    */
   images: {
+    /** 首頁主視覺，取自 miao.tw 的 hero banner */
     main: {
+      src: 'assets/img/miao-hero.jpg',
+      width: 1400,
+      height: 697,
+      // 圖上有內嵌文字，alt 必須把文字內容也帶進來，螢幕閱讀器才讀得到
+      alt: '貓是上帝最完美的傑作 — The smallest feline is a masterpiece',
+    },
+    iod: {
       src: 'assets/img/hero-main.webp',
       width: 980,
       height: 840,
@@ -53,11 +61,11 @@ export const site = {
    */
   heroCredit: {
     title: '網站主視覺與環境照',
-    titleUrl: 'https://www.iod131.com/',
+    titleUrl: 'https://www.miao.tw/',
     author: '喵屋貓咪專科醫院',
     license: '',
     licenseUrl: '',
-    source: 'iod131.com',
+    source: 'miao.tw 與 iod131.com',
   },
 
   clinic: {
