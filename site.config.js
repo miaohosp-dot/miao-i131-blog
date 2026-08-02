@@ -20,6 +20,12 @@ export const site = {
     name: '喵屋貓咪專科醫院',
     suffix: '甲亢與放射碘',
   },
+
+  /** 頁首右上角的行動呼籲按鈕 */
+  cta: {
+    label: '預約諮詢',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSdwGYeMCEBEi1mN2byzxcro8L-IkvVt9ys0TfNri4cEG1fyrA/viewform?pli=1',
+  },
   description:
     '貓咪甲狀腺機能亢進與碘-131 放射碘治療的完整衛教：症狀辨識、四種治療方式比較、療程流程與治療後追蹤。',
   lang: 'zh-Hant-TW',

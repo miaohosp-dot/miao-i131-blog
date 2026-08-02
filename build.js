@@ -183,10 +183,13 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
       <span class="brand__name">${escapeHtml(site.brand.name)}</span>
       <span class="brand__suffix">· ${escapeHtml(site.brand.suffix)}</span>
     </a>
-    <nav class="nav" aria-label="主要導覽">
-      <a href="${p || './'}"${depth === 0 ? ' aria-current="page"' : ''}>全部文章</a>
-      <a href="${p}about/">關於我們</a>
-    </nav>
+    <div class="header-right">
+      <nav class="nav" aria-label="主要導覽">
+        <a href="${p || './'}"${depth === 0 ? ' aria-current="page"' : ''}>全部文章</a>
+        <a href="${p}about/">關於我們</a>
+      </nav>
+      <a class="cta" href="${site.cta.url}" target="_blank" rel="noopener">${escapeHtml(site.cta.label)}</a>
+    </div>
   </div>
 </header>
 <main id="main">`;

@@ -236,6 +236,44 @@ strong {
   color: var(--accent);
 }
 
+/* 導覽 + 預約按鈕：一起靠右，空間不足時整組換行 */
+.header-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+  min-width: 0;
+}
+
+/* 預約諮詢按鈕 */
+.cta {
+  /* inline-flex + min-height 確保觸控目標達到 44px（行動裝置無障礙建議值） */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  flex: none;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.45em 1.2em;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.cta:hover {
+  background: #d8452f;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /* --- 6. 首頁英雄區 ------------------------------------------------------- */
 
 .hero {
