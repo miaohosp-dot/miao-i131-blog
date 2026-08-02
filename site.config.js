@@ -2,6 +2,13 @@
  * 全站設定。改這裡就會反映到所有頁面。
  */
 export const site = {
+  /**
+   * 網站的正式網址（結尾不要加斜線）。
+   * 這個值決定 canonical、og:image、sitemap 使用的絕對網址，
+   * 也是解決「同內容同時存在 pages.dev 與 github.io」重複內容問題的關鍵。
+   */
+  baseUrl: 'https://miao-i131-blog.pages.dev',
+
   title: '貓甲亢與放射碘治療',
   shortTitle: '喵屋 · 甲亢與放射碘',
   description:
@@ -11,24 +18,44 @@ export const site = {
   /** 文章未指定作者時使用的預設值 */
   defaultAuthor: '喵屋貓咪專科醫院',
 
-  /** HERO 區圖片（等比例縮放，寬度不超過內容區） */
-  hero: {
-    src: 'assets/img/hero-main.webp',
-    width: 980,
-    height: 840,
-    alt: '貓咪碘-131 放射碘治療中心主視覺',
+  /**
+   * 可用的 HERO 圖片。文章 frontmatter 用 `hero: cat` 指定其中一個。
+   * 全部都會等比例縮放，寬度不超過內容文字區。
+   */
+  images: {
+    main: {
+      src: 'assets/img/hero-main.webp',
+      width: 980,
+      height: 840,
+      alt: '貓咪碘-131 放射碘治療中心主視覺',
+    },
+    cat: {
+      src: 'assets/img/article-cat.jpg',
+      width: 1200,
+      height: 627,
+      alt: '一隻貓在夕陽下的海邊行走',
+    },
+    clinic: {
+      src: 'assets/img/clinic-wide.jpg',
+      width: 1600,
+      height: 655,
+      alt: '喵屋貓咪專科醫院環境',
+    },
   },
 
+  /** 首頁使用的 HERO 圖 */
+  defaultHero: 'main',
+
   /**
-   * HERO 圖片出處標示，顯示於 footer。
-   * 目前使用的是喵屋自有網站 iod131.com 的主視覺，非 CC 授權素材。
+   * 圖片出處標示，顯示於 footer。
+   * 目前使用的是喵屋自有網站 iod131.com 的素材，非 CC 授權圖片。
    * 若日後改用 CC BY 圖片，把 license / licenseUrl 填上即可自動顯示授權連結。
    */
   heroCredit: {
-    title: '碘-131 放射碘治療中心主視覺',
+    title: '網站主視覺與環境照',
     titleUrl: 'https://www.iod131.com/',
     author: '喵屋貓咪專科醫院',
-    license: '', // 自有素材，無需 CC 授權標示
+    license: '',
     licenseUrl: '',
     source: 'iod131.com',
   },

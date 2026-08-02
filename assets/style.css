@@ -264,13 +264,13 @@ strong {
   text-wrap: balance; /* 標題折行更均勻，支援的瀏覽器才生效 */
 }
 
-/* HERO 圖片：等比例縮放，寬度永遠不超過內容文字區（.wrap 的 42rem） */
+/* HERO 圖片：等比例縮放，寬度永遠不超過內容文字區（.wrap 的 42rem）
+   不指定 aspect-ratio，讓每張圖保持自己的原始比例、完全不裁切；
+   HTML 上的 width/height 屬性負責預留空間，避免載入時版面跳動。 */
 .hero__img {
   width: 100%;
   max-width: 100%;
-  height: auto; /* 保持原始長寬比，不變形 */
-  aspect-ratio: 980 / 840;
-  object-fit: cover;
+  height: auto;
   border-radius: var(--radius);
   margin: 0 auto 1.8rem;
   box-shadow: var(--shadow);
@@ -591,6 +591,59 @@ tr:last-child td {
   margin-top: 1rem;
   font-size: 0.82rem;
   color: var(--text-faint);
+}
+
+/* --- 12b. 文章間導覽（上一篇／下一篇）----------------------------------- */
+
+.post-nav {
+  display: grid;
+  gap: 0.9rem;
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .post-nav {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.post-nav__item {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  text-decoration: none;
+  min-width: 0; /* 長標題不撐開 grid 欄位 */
+  transition: border-color 0.15s ease;
+}
+
+.post-nav__item:hover {
+  border-color: var(--accent);
+}
+
+.post-nav__label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-bottom: 0.25rem;
+}
+
+.post-nav__title {
+  display: block;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.post-nav__item--next {
+  text-align: right;
+}
+
+/* 只有下一篇時，讓它靠右對齊佔第二欄 */
+.post-nav__item--next:only-child {
+  grid-column: -2;
 }
 
 /* --- 13. 返回連結 -------------------------------------------------------- */
