@@ -161,7 +161,9 @@ export const site = {
    */
   articleBackdrop: {
     src: 'assets/img/article-cat.jpg',
-    opacity: 0.16,
+    // 這張照片本身偏暗（沙灘與剪影佔大半），0.16 混合後幾乎與背景同色。
+    // 0.45 是「清楚看得見」與「文字仍通過 AA」之間的上限。
+    opacity: 0.45,
   },
 
   /** 首頁英雄區文案。<br> 可用來控制標題斷行位置 */
