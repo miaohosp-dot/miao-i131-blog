@@ -30,7 +30,7 @@ export const site = {
    * 這串 token 是公開識別碼，會直接寫在網頁原始碼裡，不是機密。
    * 留空時不會載入任何追蹤腳本。
    */
-  webAnalyticsToken: '',
+  webAnalyticsToken: 'c42b96a55aee4c028a70dd23bec6410a',
 
   /** 頁首右上角的行動呼籲按鈕 */
   cta: {

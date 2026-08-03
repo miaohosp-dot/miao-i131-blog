@@ -176,7 +176,7 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 <script defer src="${p}assets/counter.js"></script>
 ${
   site.webAnalyticsToken
-    ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${site.webAnalyticsToken}"}'></script>`
+    ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${site.webAnalyticsToken}"}'></script>`
     : '<!-- Web Analytics 未設定：site.config.js 的 webAnalyticsToken 為空 -->'
 }
 </head>
