@@ -154,6 +154,16 @@ export const site = {
     },
   },
 
+  /**
+   * 文章區塊的背景圖（淡化處理，不影響閱讀）。
+   * 換圖只要改 src；opacity 控制淡化程度，建議 0.08–0.18。
+   * 卡片本身是不透明的，所以文字對比不受影響。
+   */
+  articleBackdrop: {
+    src: 'assets/img/article-cat.jpg',
+    opacity: 0.16,
+  },
+
   /** 首頁英雄區文案。<br> 可用來控制標題斷行位置 */
   heroText: {
     title: '貓咪甲狀腺功能亢進<br>與放射碘治療',

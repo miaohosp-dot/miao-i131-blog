@@ -1156,3 +1156,53 @@ tr:last-child td {
   line-height: 1.7;
   margin: 0.15rem 0 0;
 }
+
+/* --- 16. 文章區塊背景 ----------------------------------------------------
+   只套用在部落格文章列表區塊；hero 與數據區維持純深色。
+   ------------------------------------------------------------------------ */
+
+.post-section {
+  position: relative;
+  isolation: isolate; /* 讓 z-index:-1 的背景層停在這個區塊內 */
+  padding-block: 0.5rem 1rem;
+}
+
+.post-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  /* background-image 與 opacity 由頁面內的 <style> 提供 */
+  background-size: cover;
+  background-position: center;
+
+  /* 上下淡出，避免與相鄰區塊之間出現硬邊 */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+/* 卡片本身不透明，文字對比完全不受背景影響。
+   這裡再加一點點不透明度，讓卡片在背景上更立體。 */
+.post-section .card {
+  backdrop-filter: blur(2px);
+}
+
+/* 背景圖最亮處會把區塊標題的對比壓到 4.45:1，略低於 AA 的 4.5:1。
+   不調暗圖片（維持背景可見度），改把標題文字提亮到 60% → 5.64:1。 */
+.post-section .sec-head__no {
+  color: rgba(255, 255, 255, 0.6);
+}

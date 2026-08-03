@@ -423,13 +423,27 @@ function renderIndex(posts) {
 
 ${statsSection()}
 
+${
+  site.articleBackdrop
+    ? `  <style>
+    /* 寫在頁面裡而不是外部樣式表：CSS 自訂屬性中的 url() 會相對於「樣式表」
+       解析，放在 /assets/style.css 會被解成 /assets/assets/… 而 404。
+       行內 style 相對於「網頁」解析，路徑才正確，也不必寫死絕對路徑。 */
+    .post-section::before {
+      background-image: url('${site.articleBackdrop.src}');
+      opacity: ${site.articleBackdrop.opacity};
+    }
+  </style>` : ''
+}
+  <section class="post-section">
 ${sectionHead('01', '全部文章', `共 ${posts.length} 篇`)}
 
-  <div class="wrap wrap--wide">
-    <ul class="post-list">
+    <div class="wrap wrap--wide">
+      <ul class="post-list">
 ${cards}
-    </ul>
-  </div>
+      </ul>
+    </div>
+  </section>
 ` +
     footer(0)
   );
