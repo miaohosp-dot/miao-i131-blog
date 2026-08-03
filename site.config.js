@@ -97,7 +97,6 @@ export const site = {
       src: 'assets/img/miao-hero.jpg',
       width: 1400,
       height: 697,
-      // 圖上有內嵌文字，alt 必須把文字內容也帶進來，螢幕閱讀器才讀得到
       // 圖上有內嵌文字，alt 保留完整內容供螢幕閱讀器讀取；
       // caption 省略，圖片下方不顯示圖說
       alt: '貓是上帝最完美的傑作 — The smallest feline is a masterpiece',
@@ -158,8 +157,7 @@ export const site = {
   /** 首頁英雄區文案。<br> 可用來控制標題斷行位置 */
   heroText: {
     title: '貓咪甲狀腺功能亢進<br>與放射碘治療',
-    intro:
-      '甲亢是中老年貓最常見的內分泌疾病。這裡整理了從症狀辨識、治療選擇到 I-131 療程的完整說明，希望能減少飼主在照顧路上的徬徨無助。',
+    intro: '我們致力讓您的甲亢貓不再終身用藥',
   },
 
   /** 首頁使用的 HERO 圖 */
