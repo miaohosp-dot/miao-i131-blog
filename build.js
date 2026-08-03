@@ -174,6 +174,7 @@ function head({ title, description, depth, canonicalPath, image, jsonLd }) {
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
 <script defer src="${p}assets/views-config.js"></script>
 <script defer src="${p}assets/counter.js"></script>
+<script defer src="${p}assets/stats.js"></script>
 ${
   site.webAnalyticsToken
     ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${site.webAnalyticsToken}"}'></script>`
@@ -292,6 +293,64 @@ const sectionHead = (no, title, note) =>
     }</div>
   </div>`;
 
+/* ---------- 成績數據區（跳動數字 + 長條圖）---------------------------- */
+
+function statsSection() {
+  const st = site.stats;
+  if (!st) return '';
+
+  const max = Math.max(...st.chart.bars.map((b) => b.value));
+
+  const boxes = st.boxes
+    .map(
+      (b) => `        <div class="stat-box${b.highlight ? ' stat-box--hl' : ''}">
+          <div class="stat-box__num"><span class="count" data-to="${b.value}">${b.value}</span>${escapeHtml(b.unit)}</div>
+          <div class="stat-box__label">${escapeHtml(b.label)}</div>
+        </div>`
+    )
+    .join('\n');
+
+  const bars = st.chart.bars
+    .map(
+      (b, i) => `          <div class="bar${b.partial ? ' bar--partial' : ''}" style="--i:${i}">
+            <span class="bar__value"><span class="count" data-to="${b.value}">${b.value}</span></span>
+            <div class="bar__fill" style="--h:${Math.round((b.value / max) * 100)}%"></div>
+            <span class="bar__year">${escapeHtml(b.year)}${b.partial ? '*' : ''}</span>
+          </div>`
+    )
+    .join('\n');
+
+  return `  <section class="stats" aria-label="治療成績數據">
+    <div class="wrap wrap--wide stats__inner">
+      <div class="stats__intro">
+        <div class="sec-head">
+          <div class="sec-head__no"><b>00</b> / 治療成績</div>
+        </div>
+        <h2 class="stats__headline">${escapeHtml(st.headline)}</h2>
+        <p class="stats__lead">${escapeHtml(st.lead)}</p>
+      </div>
+
+      <div class="stats__data">
+        <p class="stats__eyebrow">${escapeHtml(st.eyebrow)}</p>
+        <div class="stats__big"><span class="count" data-to="${st.big.value}">${st.big.value}</span>${escapeHtml(st.big.suffix)}</div>
+        <p class="stats__caption">${escapeHtml(st.big.caption)}</p>
+
+        <div class="stat-boxes">
+${boxes}
+        </div>
+
+        <div class="chart">
+          <p class="chart__title">${escapeHtml(st.chart.title)}</p>
+          <div class="chart__bars">
+${bars}
+          </div>
+          <p class="chart__note">* ${escapeHtml(st.chart.note)}</p>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
 /* ---------- 首頁 ------------------------------------------------------ */
 
 function renderIndex(posts) {
@@ -333,6 +392,8 @@ function renderIndex(posts) {
       <p class="hero__views">${viewCounter('home')}</p>
     </div>
   </section>
+
+${statsSection()}
 
 ${sectionHead('01', '全部文章', `共 ${posts.length} 篇`)}
 

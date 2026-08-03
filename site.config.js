@@ -32,6 +32,37 @@ export const site = {
    */
   webAnalyticsToken: 'c42b96a55aee4c028a70dd23bec6410a',
 
+  /**
+   * 首頁的成績數據區（帶跳動數字與長條圖動畫）
+   *
+   * ⚠️ chart 的逐年數字是「由總數 890 與年增率 30% 推算」而來，
+   *    不是實際的逐年病歷統計。發布前請以真實數據取代。
+   *    推算方式：2021 年為 a，逐年 ×1.3，六年總和 = 890 → a ≈ 70
+   */
+  stats: {
+    eyebrow: '貓甲亢病例累計 · SINCE 2021',
+    headline: '不是說得好聽，是真的做得到。',
+    lead: '每一隻來到喵屋的甲亢貓，我們都持續追蹤、逐年統計。這是治療有沒有用，最誠實的答案。',
+    big: { value: 890, suffix: '', caption: '2021 年至今，喵屋貓咪專科醫院累計病例數' },
+    boxes: [
+      { value: 408, unit: '隻', label: '已完成放射碘治療' },
+      { value: 30, unit: '%', label: '每年病例增長' },
+      { value: 98, unit: '%', label: '放射碘治癒率', highlight: true },
+    ],
+    chart: {
+      title: '歷年甲亢病例數',
+      note: '2026 年為統計中',
+      bars: [
+        { year: '2021', value: 70 },
+        { year: '2022', value: 91 },
+        { year: '2023', value: 118 },
+        { year: '2024', value: 153 },
+        { year: '2025', value: 199 },
+        { year: '2026', value: 259, partial: true },
+      ],
+    },
+  },
+
   /** 頁首右上角的行動呼籲按鈕 */
   cta: {
     label: '預約諮詢',
