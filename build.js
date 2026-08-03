@@ -174,6 +174,11 @@ function head({ title, description, depth, canonicalPath, image, jsonLd }) {
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
 <script defer src="${p}assets/views-config.js"></script>
 <script defer src="${p}assets/counter.js"></script>
+${
+  site.webAnalyticsToken
+    ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${site.webAnalyticsToken}"}'></script>`
+    : '<!-- Web Analytics 未設定：site.config.js 的 webAnalyticsToken 為空 -->'
+}
 </head>
 <body data-page="${escapeHtml(canonicalPath || 'home')}">
 <a class="skip-link" href="#main">跳到主要內容</a>

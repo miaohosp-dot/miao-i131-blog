@@ -21,6 +21,17 @@ export const site = {
     suffix: '甲亢與放射碘',
   },
 
+  /**
+   * Cloudflare Web Analytics 的 beacon token。
+   *
+   * 取得方式：Cloudflare 後台 → Web Analytics → Add a site
+   * → 輸入 miao-i131-blog.pages.dev → 複製 data-cf-beacon 裡的 token
+   *
+   * 這串 token 是公開識別碼，會直接寫在網頁原始碼裡，不是機密。
+   * 留空時不會載入任何追蹤腳本。
+   */
+  webAnalyticsToken: '',
+
   /** 頁首右上角的行動呼籲按鈕 */
   cta: {
     label: '預約諮詢',
