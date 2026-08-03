@@ -66,22 +66,34 @@ build.js          建置腳本
 dist/             產生的網站（不進版控）
 ```
 
-## 瀏覽次數計數器（Supabase）
+## 瀏覽次數計數器
 
 每篇文章有獨立計數器，首頁本身也有一個，且首頁卡片會顯示各篇的累計次數。
 
-設定步驟：
+資料存在 **Cloudflare D1**，由 `counter-worker/` 這個 Worker 提供 API：
 
-1. 到 [supabase.com](https://supabase.com) 建立專案
-2. 進入 **SQL Editor**，貼上並執行 `supabase-setup.sql`
-3. 到 **Project Settings → API**，複製 Project URL 與 anon public key
-4. 填進 `assets/supabase-config.js`
-5. 重新建置
+| 端點 | 用途 |
+| --- | --- |
+| `POST /v/<slug>` | 累加該頁次數，回傳新數值 |
+| `GET /all` | 取得所有頁面次數，供首頁卡片使用 |
 
-未設定時計數器會自動隱藏，網站其他功能完全正常。
+累加用 SQL 的 `views = views + 1`，這是原子操作，多人同時瀏覽不會漏算。
 
-`anon key` 是設計成可公開的（受資料表 RLS 政策保護），提交到 git 沒有問題。
-**不要**把 `service_role` key 放進前端。
+前端位址設定在 `assets/views-config.js`；留空則計數器自動隱藏。
+
+重新部署 API：
+
+```bash
+cd counter-worker && npx wrangler deploy
+```
+
+查看目前數據：
+
+```bash
+npx wrangler d1 execute miao-blog-views --remote --command="select * from page_views order by views desc"
+```
+
+CORS 只允許正式網域與 localhost，`counter-worker/src/index.js` 的 `ALLOWED_ORIGINS` 可調整。
 
 ## 排版原則：不破框
 

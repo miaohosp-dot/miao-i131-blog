@@ -172,7 +172,7 @@ function head({ title, description, depth, canonicalPath, image, jsonLd }) {
 <link rel="stylesheet" href="${p}assets/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
-<script defer src="${p}assets/supabase-config.js"></script>
+<script defer src="${p}assets/views-config.js"></script>
 <script defer src="${p}assets/counter.js"></script>
 </head>
 <body data-page="${escapeHtml(canonicalPath || 'home')}">

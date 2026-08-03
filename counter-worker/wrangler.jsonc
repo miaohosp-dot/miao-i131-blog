@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "miao-blog-views",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-01",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "miao-blog-views",
+      "database_id": "2489c937-c961-4c2b-85d9-92d7ec91346f"
+    }
+  ]
+}

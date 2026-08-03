@@ -2,3 +2,5 @@ node_modules/
 dist/
 .wrangler/
 .DS_Store
+counter-worker/node_modules/
+counter-worker/.wrangler/

@@ -1,63 +1,52 @@
 /**
- * 瀏覽次數計數器（Supabase）
+ * 瀏覽次數計數器
  *
  * - 每一篇文章有獨立的計數器，以網址 slug 作為鍵值
  * - 首頁本身也有一個計數器（鍵值為 home）
  * - 首頁的每張卡片會顯示該篇文章的累計次數
  *
- * 未設定 Supabase 時整段靜默略過，計數器保持隱藏，不影響網站其他部分。
+ * 資料來自 counter-worker/（Cloudflare Worker + D1）。
+ * 未設定 API 位址時整段靜默略過，計數器保持隱藏。
  */
 (function () {
   'use strict';
 
-  const cfg = window.SUPABASE_CONFIG || {};
-  if (!cfg.url || !cfg.anonKey) return; // 尚未設定，直接不做事
-
-  const base = cfg.url.replace(/\/+$/, '');
-  const headers = {
-    apikey: cfg.anonKey,
-    Authorization: 'Bearer ' + cfg.anonKey,
-    'Content-Type': 'application/json',
-  };
+  const API = (window.VIEWS_API || '').replace(/\/+$/, '');
+  if (!API) return; // 尚未設定，不做任何事
 
   const format = (n) => Number(n).toLocaleString('zh-TW');
 
   /** 把數字填進對應的計數器元素並顯示出來 */
   function show(slug, count) {
-    document.querySelectorAll('[data-views="' + CSS.escape(slug) + '"]').forEach((el) => {
-      const num = el.querySelector('.views__num');
-      if (num) num.textContent = format(count);
-      el.hidden = false;
-    });
+    document
+      .querySelectorAll('[data-views="' + CSS.escape(slug) + '"]')
+      .forEach((el) => {
+        const num = el.querySelector('.views__num');
+        if (num) num.textContent = format(count);
+        el.hidden = false;
+      });
   }
 
   /** 這一頁的 slug；首頁為 home */
   const pageSlug = document.body.dataset.page || 'home';
 
-  /** 累加這一頁的次數，回傳新的數值 */
   async function increment(slug) {
-    const res = await fetch(base + '/rest/v1/rpc/increment_view', {
+    const res = await fetch(API + '/v/' + encodeURIComponent(slug), {
       method: 'POST',
-      headers: headers,
-      body: JSON.stringify({ page_slug: slug }),
     });
     if (!res.ok) throw new Error('increment failed: ' + res.status);
-    return await res.json();
+    return (await res.json()).views;
   }
 
-  /** 讀取全部文章的次數，用來填首頁卡片 */
   async function fetchAll() {
-    const res = await fetch(base + '/rest/v1/page_views?select=slug,views', {
-      headers: headers,
-    });
+    const res = await fetch(API + '/all');
     if (!res.ok) throw new Error('fetch failed: ' + res.status);
     return await res.json();
   }
 
   async function run() {
     try {
-      const count = await increment(pageSlug);
-      show(pageSlug, count);
+      show(pageSlug, await increment(pageSlug));
     } catch (err) {
       console.warn('[counter] 累加失敗：', err.message);
     }
