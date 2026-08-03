@@ -441,7 +441,7 @@ function renderPost(post, prev, next, related4) {
       telephone: site.clinic.phone,
       address: site.clinic.address,
     },
-    about: { '@type': 'MedicalCondition', name: '貓甲狀腺機能亢進' },
+    about: { '@type': 'MedicalCondition', name: '貓甲狀腺功能亢進' },
   };
 
   const navLink = (p, label, cls) =>

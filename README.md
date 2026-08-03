@@ -8,7 +8,7 @@
 
 ```
 /                                     首頁（文章列表）
-/20260802-what-is-hyperthyroidism/    什麼是貓甲狀腺機能亢進？
+/20260802-what-is-hyperthyroidism/    什麼是貓甲狀腺功能亢進？
 /20260802-treatment-comparison/       四種治療方式，該怎麼選？
 ```
 

@@ -81,7 +81,7 @@ export const site = {
     url: 'https://docs.google.com/forms/d/e/1FAIpQLSdwGYeMCEBEi1mN2byzxcro8L-IkvVt9ys0TfNri4cEG1fyrA/viewform?pli=1',
   },
   description:
-    '貓咪甲狀腺機能亢進與碘-131 放射碘治療的完整衛教：症狀辨識、四種治療方式比較、療程流程與治療後追蹤。',
+    '貓咪甲狀腺功能亢進與碘-131 放射碘治療的完整衛教：症狀辨識、四種治療方式比較、療程流程與治療後追蹤。',
   lang: 'zh-Hant-TW',
 
   /** 文章未指定作者時使用的預設值 */
@@ -156,7 +156,7 @@ export const site = {
 
   /** 首頁英雄區文案。<br> 可用來控制標題斷行位置 */
   heroText: {
-    title: '貓咪甲狀腺機能亢進<br>與放射碘治療',
+    title: '貓咪甲狀腺功能亢進<br>與放射碘治療',
     intro:
       '甲亢是中老年貓最常見的內分泌疾病。這裡整理了從症狀辨識、治療選擇到 I-131 療程的完整說明，希望能減少飼主在照顧路上的徬徨無助。',
   },
