@@ -304,7 +304,7 @@ function statsSection() {
   const boxes = st.boxes
     .map(
       (b) => `        <div class="stat-box${b.highlight ? ' stat-box--hl' : ''}">
-          <div class="stat-box__num"><span class="count" data-to="${b.value}">${b.value}</span>${escapeHtml(b.unit)}</div>
+          <div class="stat-box__num">${b.prefix ? `<span class="stat-box__prefix">${escapeHtml(b.prefix)}</span>` : ''}<span class="count" data-to="${b.value}">${b.value}</span>${escapeHtml(b.unit)}</div>
           <div class="stat-box__label">${escapeHtml(b.label)}</div>
         </div>`
     )
@@ -338,6 +338,7 @@ function statsSection() {
         <div class="stat-boxes">
 ${boxes}
         </div>
+        ${st.boxesNote ? `<p class="stats__note">${escapeHtml(st.boxesNote)}</p>` : ''}
 
         <div class="chart">
           <p class="chart__title">${escapeHtml(st.chart.title)}</p>

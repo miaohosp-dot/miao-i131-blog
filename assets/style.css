@@ -939,6 +939,12 @@ tr:last-child td {
   }
 }
 
+@media (min-width: 58rem) {
+  .stat-boxes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .stats__headline {
   font-size: clamp(1.4rem, 4.4vw, 1.85rem);
   line-height: 1.5;
@@ -986,6 +992,8 @@ tr:last-child td {
 .stat-boxes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  /* 桌機改雙欄版面後右欄只剩約 460px，auto-fit 會排成 3+1、最後一個落單。
+     這裡固定成 2×2，視覺才平衡。 */
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -1100,4 +1108,16 @@ tr:last-child td {
   .bar__fill {
     transition: none;
   }
+}
+
+/* 帶符號的數值（例如「低於 1%」），符號不參與跳動動畫 */
+.stat-box__prefix {
+  margin-right: 0.05em;
+}
+
+.stats__note {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  margin: -1.6rem 0 2.2rem;
+  line-height: 1.7;
 }
