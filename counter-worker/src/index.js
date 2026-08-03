@@ -55,16 +55,27 @@ export default {
         return json({ error: 'invalid slug' }, 400, request);
       }
 
-      const row = await env.DB.prepare(
-        `insert into page_views (slug, views) values (?, 1)
-         on conflict(slug) do update
-           set views = views + 1, updated_at = datetime('now')
-         returning views`
-      )
-        .bind(slug)
-        .first();
+      // Cloudflare 邊緣節點提供的地理資訊。只取國家與區域，
+      // 不取也不儲存 IP——國家層級的彙總無法識別個人。
+      const cf = request.cf || {};
+      const country = typeof cf.country === 'string' ? cf.country.slice(0, 2) : 'XX';
+      const region = typeof cf.region === 'string' ? cf.region.slice(0, 64) : '';
 
-      return json({ slug, views: row.views }, 200, request);
+      const [total] = await env.DB.batch([
+        env.DB.prepare(
+          `insert into page_views (slug, views) values (?, 1)
+           on conflict(slug) do update
+             set views = views + 1, updated_at = datetime('now')
+           returning views`
+        ).bind(slug),
+        env.DB.prepare(
+          `insert into page_views_geo (slug, country, region, views) values (?, ?, ?, 1)
+           on conflict(slug, country, region) do update
+             set views = views + 1, updated_at = datetime('now')`
+        ).bind(slug, country, region),
+      ]);
+
+      return json({ slug, views: total.results[0].views }, 200, request);
     }
 
     // 取得全部，供首頁卡片填數字
@@ -75,9 +86,40 @@ export default {
       return json(results, 200, request);
     }
 
+    // 依國家彙總；帶 ?slug= 可看單篇，帶 ?detail=region 可展開到區域
+    if (request.method === 'GET' && url.pathname === '/geo') {
+      const slug = url.searchParams.get('slug');
+      const byRegion = url.searchParams.get('detail') === 'region';
+
+      if (slug && !SLUG_RE.test(slug)) {
+        return json({ error: 'invalid slug' }, 400, request);
+      }
+
+      const cols = byRegion ? 'country, region' : 'country';
+      const where = slug ? 'where slug = ?' : '';
+      const stmt = env.DB.prepare(
+        `select ${cols}, sum(views) as views
+         from page_views_geo ${where}
+         group by ${cols}
+         order by views desc`
+      );
+
+      const { results } = await (slug ? stmt.bind(slug) : stmt).all();
+      return json(results, 200, request);
+    }
+
     if (url.pathname === '/') {
       return json(
-        { service: 'miao-blog-views', endpoints: ['POST /v/<slug>', 'GET /all'] },
+        {
+          service: 'miao-blog-views',
+          endpoints: [
+            'POST /v/<slug>',
+            'GET /all',
+            'GET /geo',
+            'GET /geo?slug=<slug>',
+            'GET /geo?detail=region',
+          ],
+        },
         200,
         request
       );

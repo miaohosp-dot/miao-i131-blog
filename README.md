@@ -76,6 +76,9 @@ dist/             產生的網站（不進版控）
 | --- | --- |
 | `POST /v/<slug>` | 累加該頁次數，回傳新數值 |
 | `GET /all` | 取得所有頁面次數，供首頁卡片使用 |
+| `GET /geo` | 依國家彙總的瀏覽次數 |
+| `GET /geo?slug=<slug>` | 單篇文章的國家分布 |
+| `GET /geo?detail=region` | 展開到區域層級 |
 
 累加用 SQL 的 `views = views + 1`，這是原子操作，多人同時瀏覽不會漏算。
 
@@ -92,6 +95,15 @@ cd counter-worker && npx wrangler deploy
 ```bash
 npx wrangler d1 execute miao-blog-views --remote --command="select * from page_views order by views desc"
 ```
+
+查看來源國家：
+
+```bash
+npx wrangler d1 execute miao-blog-views --remote --command="select country, sum(views) v from page_views_geo group by country order by v desc"
+```
+
+地理資料由 Cloudflare 邊緣節點提供（`request.cf`），**只記錄國家與區域代碼，不記錄 IP**，
+也不需要任何第三方分析服務。
 
 CORS 只允許正式網域與 localhost，`counter-worker/src/index.js` 的 `ALLOWED_ORIGINS` 可調整。
 
