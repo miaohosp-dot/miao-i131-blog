@@ -242,31 +242,55 @@ const heroFigure = (img, depth) =>
       ${img.caption ? `<figcaption>${escapeHtml(img.caption)}</figcaption>` : ''}
     </figure>`;
 
+/** 時鐘圖示，用於卡片的閱讀資訊列 */
+const CLOCK_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+
 /**
- * 文章卡片：縮圖 → 分類 → 日期 → 標題 → 摘要 → 閱讀全文
+ * 文章卡片，版式參考 innovarad.tw 的課程卡：
+ * 整張卡片是一個連結 → 橫幅圖出血至卡片邊緣 → 分類 → 日期 → 標題
+ * → 細分隔線 → 摘要 → 資訊列 → 右下角行動文字。
+ *
  * depth 0 用於首頁，1 用於文章頁的延伸閱讀區。
  */
 function card(post, depth) {
   const p = prefix(depth);
   const href = depth === 0 ? `${post.slug}/` : `../${post.slug}/`;
-  return `      <li class="card">
-        <a class="card__thumb" href="${href}" tabindex="-1" aria-hidden="true">
-          <img src="${p}${post.hero.src}" width="${post.hero.width}" height="${post.hero.height}"
-               alt="" loading="lazy">
-        </a>
-        <div class="card__body">
-          <div class="card__meta">
-            ${post.tag ? `<span class="tag">${escapeHtml(post.tag)}</span>` : ''}
-            <time datetime="${isoDate(post.updated)}">📅 ${slashDate(post.updated)}</time>
-            ${post.readingTime ? `<span>閱讀約 ${escapeHtml(post.readingTime)} 分鐘</span>` : ''}
-            ${viewCounter(post.slug)}
+  const d = post.updated;
+
+  return `      <li>
+        <a class="card" href="${href}">
+          <img class="card__banner" src="${p}${post.hero.src}"
+               width="${post.hero.width}" height="${post.hero.height}" alt="" loading="lazy">
+          ${post.tag ? `<span class="card__tag">${escapeHtml(post.tag)}</span>` : ''}
+          <div class="card__date">
+            <b>${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}</b>
+            <time datetime="${isoDate(d)}">${d.getFullYear()}</time>
           </div>
-          <h2><a href="${href}">${escapeHtml(post.title)}</a></h2>
-          <p>${escapeHtml(post.excerpt)}</p>
-          <p class="card__more"><a href="${href}">閱讀全文 →</a></p>
-        </div>
+          <h2 class="card__title">${escapeHtml(post.title)}</h2>
+          <hr class="card__rule">
+          <p class="card__desc">${escapeHtml(post.excerpt)}</p>
+          <div class="card__info">
+            ${CLOCK_ICON}
+            <span>${post.readingTime ? `閱讀約 ${escapeHtml(post.readingTime)} 分鐘` : '衛教文章'}${
+              post.author ? ` ・ ${escapeHtml(post.author)}` : ''
+            }</span>
+          </div>
+          ${viewCounter(post.slug)}
+          <span class="card__cta">閱讀全文 →</span>
+        </a>
       </li>`;
 }
+
+/** 區塊標題：上方粗線 + 編號，取自 innovarad.tw 的 sec-head */
+const sectionHead = (no, title, note) =>
+  `  <div class="sec-head wrap">
+    <div class="sec-head__no"><b>${escapeHtml(no)}</b> / ${escapeHtml(title)}${
+      note ? ` ── ${escapeHtml(note)}` : ''
+    }</div>
+  </div>`;
 
 /* ---------- 首頁 ------------------------------------------------------ */
 
@@ -310,7 +334,9 @@ function renderIndex(posts) {
     </div>
   </section>
 
-  <div class="wrap">
+${sectionHead('01', '全部文章', `共 ${posts.length} 篇`)}
+
+  <div class="wrap wrap--wide">
     <ul class="post-list">
 ${cards}
     </ul>
@@ -403,11 +429,13 @@ ${postNav}
 
 ${
   related
-    ? `  <section class="related wrap">
-    <h2 class="related__title">延伸閱讀</h2>
-    <ul class="post-list post-list--related">
+    ? `  <section class="related">
+${sectionHead('02', '延伸閱讀')}
+    <div class="wrap wrap--wide">
+      <ul class="post-list post-list--related">
 ${related}
-    </ul>
+      </ul>
+    </div>
   </section>`
     : ''
 }

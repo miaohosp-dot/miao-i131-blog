@@ -92,6 +92,10 @@ pre {
     "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
 
   /* 版心寬度：手機留邊、桌機不過寬，中文閱讀舒適區約 34-38 字 */
+  /* 等寬字體：日期、標籤、資訊列使用，數字對齊且帶編輯感 */
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
   --measure: 42rem;
   --gutter: clamp(1rem, 4vw, 2rem);
 }
@@ -319,133 +323,206 @@ strong {
   margin-inline: auto;
 }
 
-/* --- 7. 文章列表卡片 ----------------------------------------------------- */
+/* --- 7. 文章列表卡片 -----------------------------------------------------
+   版式參考 innovarad.tw 的課程卡：整張卡片是一個連結、橫幅圖出血至卡片
+   邊緣、等寬字體的標籤與日期、標題下細分隔線、右下角行動文字。
+   ------------------------------------------------------------------------ */
+
+/* 區塊標題：上方粗線 + 編號 */
+.sec-head {
+  border-top: 3px solid var(--accent);
+  padding-top: 0.85rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.8rem;
+}
+
+.sec-head__no {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.sec-head__no b {
+  color: var(--accent);
+  font-weight: 700;
+}
 
 .post-list {
   list-style: none;
   display: grid;
-  gap: 1.1rem;
-  padding-block: 2.5rem;
+  gap: 1.4rem;
+  padding-block: 0 3rem;
 }
 
+/* 平板兩欄、桌機三欄，與參考站一致 */
+@media (min-width: 38rem) {
+  .post-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 58rem) {
+  .post-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 卡片本身就是連結：整張可點，不需要額外的標題連結 */
 .card {
+  --pad-x: 1.35rem;
+  --pad-top: 1.4rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0; /* grid 子項目不被長內容撐開 */
+
+  border: 2px solid var(--line);
+  border-radius: 12px;
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  /* grid 子項目預設 min-width:auto 會被長內容撐開，必須歸零 */
-  min-width: 0;
-  overflow: hidden; /* 讓縮圖的直角被卡片圓角裁掉 */
-}
-
-/* 卡片縮圖：固定 16:9，用 cover 裁切，不同比例的圖也能排得整齊 */
-.card__thumb {
-  display: block;
-  line-height: 0;
-}
-
-.card__thumb img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  background: var(--surface-alt);
-}
-
-.card__body {
-  padding: clamp(1.1rem, 4vw, 1.5rem);
-  min-width: 0;
-}
-
-.card__more {
-  margin-top: 0.9rem !important;
-  font-size: 0.9rem !important;
-}
-
-.card__more a {
+  padding: var(--pad-top) var(--pad-x) 1.2rem;
   text-decoration: none;
-  font-weight: 600;
-}
-
-.card__more a:hover {
-  text-decoration: underline;
+  color: inherit;
+  overflow-wrap: break-word;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
 .card:hover {
+  border-color: var(--accent-pale);
+  background: var(--surface-alt);
   transform: translateY(-2px);
 }
 
-.card__meta {
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* 橫幅圖出血到卡片邊緣：用負邊距抵銷卡片內距 */
+.card__banner {
+  width: calc(100% + var(--pad-x) * 2);
+  max-width: none;
+  margin: calc(var(--pad-top) * -1) calc(var(--pad-x) * -1) 1.1rem;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  background: var(--surface-alt);
+}
+
+.card__tag {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 0.55rem;
+}
+
+/* 日期：月/日放大，年份縮小，與參考站的「9/12 六」同構 */
+.card__date {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.7rem;
-  font-size: 0.82rem;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--mono);
   color: var(--text-faint);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
-.tag {
-  display: inline-block;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  padding: 0.15em 0.7em;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  white-space: nowrap;
+.card__date b {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
 }
 
-.card h2 {
-  font-size: clamp(1.1rem, 3.6vw, 1.3rem);
-  margin: 0 0 0.4rem;
+.card__date time {
+  font-size: 0.8rem;
+}
+
+.card__title {
+  font-size: 1.08rem;
+  line-height: 1.5;
+  margin: 0;
   padding: 0;
   border: 0;
-}
-
-.card h2 a {
   color: var(--text);
-  text-decoration: none;
 }
 
-.card h2 a:hover {
+.card:hover .card__title {
+  color: var(--accent-deep);
+}
+
+.card__rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0.9rem 0;
+  width: 100%;
+}
+
+.card__desc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-soft);
+  /* 摘要最多四行，讓卡片高度接近一致 */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 資訊列：圖示 + 閱讀時間與作者 */
+.card__info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--text-faint);
+  margin-top: 0.9rem;
+  min-width: 0;
+}
+
+.card__info svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 0.28rem;
+}
+
+.card .views {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-top: 0.35rem;
+}
+
+/* 行動文字靠右下，並用 margin-top:auto 壓到卡片底部對齊 */
+.card__cta {
+  margin-top: auto;
+  padding-top: 1rem;
+  text-align: right;
+  font-weight: 700;
+  font-size: 0.9rem;
   color: var(--accent);
 }
 
-.card p {
-  margin: 0;
-  font-size: 0.95rem;
+.card:hover .card__cta {
+  color: var(--accent-deep);
 }
 
-.card__author {
-  margin-top: 0.7rem !important;
-  font-size: 0.83rem !important;
-  color: var(--text-faint);
+/* 延伸閱讀區的卡片略小 */
+.post-list--related .card__title {
+  font-size: 1rem;
 }
 
-/* 瀏覽次數（由 Supabase 填入，未設定時保持隱藏） */
-/* 這條要放在 .views 之前：class 的 display 會蓋過瀏覽器對 [hidden] 的預設規則 */
-[hidden] {
-  display: none !important;
-}
-
-.views {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.25em;
-  white-space: nowrap;
-}
-
-.views__num {
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-  color: var(--text-soft);
-}
-
-.article__author {
-  font-weight: 600;
-  color: var(--text-soft);
+.post-list--related .card__desc {
+  -webkit-line-clamp: 3;
 }
 
 /* --- 7b. 麵包屑 ---------------------------------------------------------- */
