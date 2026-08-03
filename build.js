@@ -327,7 +327,7 @@ function statsSection() {
           <div class="sec-head__no"><b>00</b> / 治療成績</div>
         </div>
         <h2 class="stats__headline">${escapeHtml(st.headline)}</h2>
-        <p class="stats__lead">${escapeHtml(st.lead)}</p>
+        ${st.lead ? `<p class="stats__lead">${escapeHtml(st.lead)}</p>` : ''}
       </div>
 
       <div class="stats__data">

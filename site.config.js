@@ -41,8 +41,9 @@ export const site = {
    */
   stats: {
     eyebrow: '貓甲亢病例累計 · SINCE 2021',
-    headline: '不是說得好聽，是真的做得到。',
-    lead: '每一隻來到喵屋的甲亢貓，我們都持續追蹤、逐年統計。這是治療有沒有用，最誠實的答案。',
+    headline:
+      '貓放射碘（I-131）是貓咪甲狀腺功能亢進的黃金標準治療，具有高成功率、低侵入性與一勞永逸的優點',
+    lead: '',
     big: { value: 890, suffix: '', caption: '2021 年至今，喵屋貓咪專科醫院累計病例數' },
     boxes: [
       { value: 408, unit: '隻', label: '已完成放射碘治療' },
