@@ -48,11 +48,7 @@ export const site = {
       { value: 408, unit: '隻', label: '已完成放射碘治療' },
       { value: 30, unit: '%', label: '每年病例增長' },
       { value: 98, unit: '%', label: '放射碘治癒率', highlight: true },
-      // prefix 用於「低於 1%」這種帶符號的數值，符號不參與跳動動畫
-      { prefix: '<', value: 1, unit: '%', label: '治療後出現甲狀腺低下' },
     ],
-    /** 顯示在數據方塊下方的補充說明 */
-    boxesNote: '絕大部分的貓在治療後，甲狀腺數值都會恢復正常。',
     chart: {
       title: '歷年甲亢病例數',
       note: '2026 年為統計中',
@@ -64,6 +60,17 @@ export const site = {
         { year: '2025', value: 199 },
         { year: '2026', value: 259, partial: true },
       ],
+    },
+    /**
+     * 長條圖下方的補充數據。prefix 用於「低於 1%」這種帶符號的值，
+     * 符號固定顯示、不參與跳動動畫。
+     */
+    footnote: {
+      prefix: '<',
+      value: 1,
+      unit: '%',
+      label: '治療後出現甲狀腺低下',
+      note: '絕大部分的貓在治療後，甲狀腺數值都會恢復正常。',
     },
   },
 

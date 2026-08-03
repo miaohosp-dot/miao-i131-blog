@@ -338,7 +338,6 @@ function statsSection() {
         <div class="stat-boxes">
 ${boxes}
         </div>
-        ${st.boxesNote ? `<p class="stats__note">${escapeHtml(st.boxesNote)}</p>` : ''}
 
         <div class="chart">
           <p class="chart__title">${escapeHtml(st.chart.title)}</p>
@@ -347,6 +346,20 @@ ${bars}
           </div>
           <p class="chart__note">* ${escapeHtml(st.chart.note)}</p>
         </div>
+${
+  st.footnote
+    ? `
+        <div class="stat-footnote">
+          <div class="stat-footnote__num">${
+            st.footnote.prefix ? `<span class="stat-box__prefix">${escapeHtml(st.footnote.prefix)}</span>` : ''
+          }<span class="count" data-to="${st.footnote.value}">${st.footnote.value}</span>${escapeHtml(st.footnote.unit)}</div>
+          <div class="stat-footnote__text">
+            <div class="stat-footnote__label">${escapeHtml(st.footnote.label)}</div>
+            <p class="stat-footnote__note">${escapeHtml(st.footnote.note)}</p>
+          </div>
+        </div>`
+    : ''
+}
       </div>
     </div>
   </section>`;
