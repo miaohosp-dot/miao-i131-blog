@@ -558,6 +558,11 @@ strong {
   margin-bottom: 0.6rem;
 }
 
+/* 沒有圖說時不需要預留那段間距 */
+.hero-figure .hero__img:only-child {
+  margin-bottom: 0;
+}
+
 .hero-figure figcaption {
   font-size: 0.83rem;
   color: var(--text-faint);
