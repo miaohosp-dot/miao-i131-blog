@@ -138,6 +138,13 @@ export const site = {
       alt: '貓甲亢藥物副作用示意圖：皮膚反應、消化系統、行為改變、肝臟問題、血液與免疫',
       caption: '抗甲狀腺藥物可能出現的副作用',
     },
+    followup: {
+      src: 'assets/img/cat-followup.jpg',
+      width: 1000,
+      height: 750,
+      alt: '一隻白色長毛貓趴在診療台的毛毯上，獸醫師以手輕輕安撫',
+      caption: '治療後的定期回診，才能及早看出腎臟的變化',
+    },
     cage: {
       src: 'assets/img/cat-cage.jpg',
       width: 914,

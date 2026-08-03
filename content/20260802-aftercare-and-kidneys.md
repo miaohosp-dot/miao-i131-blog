@@ -4,7 +4,7 @@ date: 2026-08-02
 author: 喵屋貓咪專科醫院
 tag: 治療後照護
 readingTime: 6
-hero: cat
+hero: followup
 excerpt: 甲亢會「遮住」腎臟的真實狀況。治療成功之後，為什麼醫師會特別盯著腎指數看？
 ---
 
