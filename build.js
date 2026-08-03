@@ -401,8 +401,8 @@ function renderIndex(posts) {
   <section class="hero">
     <div class="wrap">
       ${heroFigure(hero, 0)}
-      <h1>貓咪甲狀腺機能亢進<br>與放射碘治療</h1>
-      <p>甲亢是中老年貓最常見的內分泌疾病。這裡整理了從症狀辨識、治療選擇到 I-131 療程的完整說明，希望能幫助你在照顧牠的路上少一點徬徨。</p>
+      <h1>${site.heroText.title}</h1>
+      <p>${escapeHtml(site.heroText.intro)}</p>
       <p class="hero__views">${viewCounter('home')}</p>
     </div>
   </section>
