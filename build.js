@@ -295,6 +295,19 @@ const sectionHead = (no, title, note) =>
 
 /* ---------- 成績數據區（跳動數字 + 長條圖）---------------------------- */
 
+/**
+ * 長條圖的灰階：依年份順序由淺到深。
+ * 深色底上「越深」＝對比越低，所以最深的一階仍保留足夠亮度，
+ * 不會讓最後一根長條糊進背景。
+ */
+function barShade(i, total) {
+  const FROM = [232, 228, 221]; // 最早的年份：淺灰
+  const TO = [110, 104, 96];    // 最新的年份：深灰（仍高於背景亮度）
+  const t = total <= 1 ? 0 : i / (total - 1);
+  const c = FROM.map((v, k) => Math.round(v + (TO[k] - v) * t));
+  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+}
+
 function statsSection() {
   const st = site.stats;
   if (!st) return '';
@@ -314,7 +327,7 @@ function statsSection() {
     .map(
       (b, i) => `          <div class="bar${b.partial ? ' bar--partial' : ''}" style="--i:${i}">
             <span class="bar__value"><span class="count" data-to="${b.value}">${b.value}</span></span>
-            <div class="bar__fill" style="--h:${Math.round((b.value / max) * 100)}%"></div>
+            <div class="bar__fill" style="--h:${Math.round((b.value / max) * 100)}%; --shade:${barShade(i, st.chart.bars.length)}"></div>
             <span class="bar__year">${escapeHtml(b.year)}${b.partial ? '*' : ''}</span>
           </div>`
     )

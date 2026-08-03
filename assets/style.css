@@ -1083,16 +1083,12 @@ tr:last-child td {
   height: var(--h, 0);
   /* flex 項目預設可被壓縮，內容為空時會被壓成 0，必須關掉 */
   flex: none;
-  background: var(--text);
+  background: var(--shade, var(--text));
   border-radius: 3px 3px 0 0;
   transition: height 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 統計中的年度用重點色標示，與參考站把最後一根塗紅同理 */
-.bar--partial .bar__fill {
-  background: var(--accent);
-}
-
+/* 長條一律為灰階；統計中的年度改由數值與年份標籤上的重點色標示 */
 .bar--partial .bar__value {
   color: var(--accent);
 }
