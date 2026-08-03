@@ -319,7 +319,9 @@ strong {
 
 .hero p {
   font-size: clamp(0.98rem, 2.8vw, 1.1rem);
-  max-width: 34rem;
+  /* 34rem 時導言剛好超過兩行一點點而折成三行，放寬到 40rem
+     讓桌機收在兩行（實際仍受 .wrap 的 42rem 版心限制） */
+  max-width: 40rem;
   margin-inline: auto;
 }
 
